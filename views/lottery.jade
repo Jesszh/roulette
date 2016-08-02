@@ -34,10 +34,12 @@ block script
     var listLength = list.length;
     var index = 0;
     var timer;
+    var isRuning;
 
     function play() {
+      isRuning = true;
       var item = list[index];
-      lucky.html(item.name + " " + item.phone);
+      lucky.html(item.name + " " + encryptPhone(item.phone)).attr('data-phone', item.phone);
       index++;
       if (index == listLength) {
         index = 0
@@ -46,5 +48,26 @@ block script
     }
 
     function stop() {
+      isRuning = false;
       clearTimeout(timer);
+      var theOne = lucky.data('phone');
+      $.post('/win', {phone: theOne}).success(function(data){
+        console.info(data);
+      })
     }
+
+    function encryptPhone(phone){
+      return phone.substr(0, 3) + '****' + phone.substr(7, 11)
+    }
+    
+    $(document).on('keydown',function(e){
+      var keycode = e.which;
+      if(keycode == 83){
+        if(!isRuning){
+          play()
+        }
+        else{
+          stop()
+        }
+      }
+    })

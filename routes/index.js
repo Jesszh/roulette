@@ -75,8 +75,8 @@ router.get('/check', function(req, res, next){
 
 });
 
-router.get('/win', function(req, res, next){
-  var phone = req.query.phone;
+router.post('/win', function(req, res, next){
+  var phone = req.body.phone;
 
   roulette.connect(mongodbConnection);
   roulette.connection.on('error', function(error) {
