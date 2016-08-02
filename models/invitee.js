@@ -20,7 +20,8 @@ InviteeSchema = new Schema({
   phone      : { type : String, unique: true },
   isCheckedIn: { type : Boolean, default: false },
   checkedInAt: { type : Date },
-  isWinner   : { type : Boolean, default: false }
+  isWinner   : { type : Boolean, default: false },
+  createAt   : { type : Date, default: Date.now()}
 },options);
 
 exports.Invitee = new wrapper.Model(mongoose.model('Invitee', InviteeSchema));

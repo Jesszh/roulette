@@ -5,7 +5,38 @@ var router = express.Router();
 var mongodbConnection = 'mongodb://localhost/roulette';
 
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  var key = req.query.key;
+
+  roulette.connect(mongodbConnection);
+  roulette.connection.on('error', function(error) {
+    throw new Error(error);
+  });
+
+  var list = roulette.list({phone: new RegExp(key)});
+  list.then(function(doc) {
+    res.render('index', { invitees: doc , key: key});
+  }, function(error) {
+    if (error) {
+      throw new Error(error);
+    }
+  });
+});
+
+router.get('/lucky', function(req, res, next) {
+
+  roulette.connect(mongodbConnection);
+  roulette.connection.on('error', function(error) {
+    throw new Error(error);
+  });
+
+  var list = roulette.list({isWinner: true});
+  list.then(function(doc) {
+    res.render('lucky', { invitees: doc});
+  }, function(error) {
+    if (error) {
+      throw new Error(error);
+    }
+  });
 });
 
 router.get('/lottery', function (req, res, next) {
@@ -15,7 +46,7 @@ router.get('/lottery', function (req, res, next) {
     throw new Error(error);
   });
 
-  var list = roulette.available();
+  var list = roulette.list({isCheckedIn: true, isWinner: false});
   list.then(function(doc) {
     res.render('lottery',{data: doc});
   }, function(error) {
@@ -35,7 +66,7 @@ router.get('/check', function(req, res, next){
 
   var inviteePromise = roulette.update(phone, {isCheckedIn: true});
   inviteePromise.then(function(doc) {
-    res.send(doc);
+    res.redirect('/?key=' + doc.phone)
   }, function(error) {
     if (error) {
       throw new Error(error);
@@ -63,26 +94,13 @@ router.get('/win', function(req, res, next){
 
 });
 
-router.get('/list',function (req, res, next) {
+router.get('/create', function (req, res,next) {
+  res.render('create');
+})
 
-  roulette.connect(mongodbConnection);
-  roulette.connection.on('error', function(error) {
-    throw new Error(error);
-  });
-
-  var list = roulette.available();
-  list.then(function(doc) {
-    res.send(doc);
-  }, function(error) {
-    if (error) {
-      throw new Error(error);
-    }
-  });
-});
-
-router.get('/create', function (req, res, next) {
-  var name = req.query.name,
-      phone = req.query.phone;
+router.post('/create', function (req, res, next) {
+  var name = req.body.name,
+      phone = req.body.phone;
 
   roulette.connect(mongodbConnection);
   roulette.connection.on('error', function(error) {
@@ -94,13 +112,7 @@ router.get('/create', function (req, res, next) {
     phone: phone
   });
   inviteePromise.then(function(doc) {
-    roulette.retrieve(doc.phone).then(function(result) {
-      res.send(result);
-    }, function(error) {
-      if (error) {
-        throw new Error(error);
-      }
-    });
+    res.redirect('/?key=' + doc.phone)
   }, function(error) {
     if (error) {
       throw new Error(error);

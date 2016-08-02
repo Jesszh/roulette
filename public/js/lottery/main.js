@@ -101,19 +101,25 @@ var $ = jQuery.noConflict();
       $body.addClass('is-overlay-off');
     }
 
-    $('.site-bg__overlay').css('background-color', _site_bg_overlay_color);
-
-    // add active class
-    $body.addClass(id.replace('#', '') + '-in');
-
-    // click event
-    $('a[href=#]').on('click', function(e) {
-      e.preventDefault();
-    });
+    $('.site-bg-overlay').css('background-color', _site_bg_overlay_color);
 
   }
+
+  function fn_siteLoader() {
+    $('.site-loader').velocity('fadeOut', {
+      queue: false,
+      delay: 500,
+      duration: 800,
+      complete: function () {
+        $('body').addClass('is-loaded');
+        $(document).trigger('is-loaded');
+      }
+    });
+  }
+
   $(window).on('load', function() {
     fn_init();
+    fn_siteLoader();
   });
 
 
@@ -195,7 +201,7 @@ var $ = jQuery.noConflict();
   }
 
   function fn_siteBgCloud() {
-    var $siteBgEffect = $('.site-bg__effect');
+    var $siteBgEffect = $('.site-bg-effect');
 
     if ($siteBgEffect.length) {
       $siteBgEffect.append(
@@ -288,7 +294,7 @@ var $ = jQuery.noConflict();
   }
 
   function fn_siteBgParallaxStar() {
-    var $siteBgEffect = $('.site-bg__effect');
+    var $siteBgEffect = $('.site-bg-effect');
 
     if ($siteBgEffect.length) {
       $siteBgEffect.append(
@@ -382,7 +388,7 @@ var $ = jQuery.noConflict();
 
   function fn_siteBgStar() {
     $body.addClass('is-site-bg-star');
-    $('.site-bg__effect').remove();
+    $('.site-bg-effect').remove();
 
     particlesJS("siteBg", {
       "particles": {
@@ -499,7 +505,7 @@ var $ = jQuery.noConflict();
 
   function fn_siteBgBubble() {
     $body.addClass('is-site-bg-bubble');
-    $('.site-bg__effect').remove();
+    $('.site-bg-effect').remove();
 
     particlesJS("siteBg", {
       "particles": {
@@ -616,7 +622,7 @@ var $ = jQuery.noConflict();
 
   function fn_siteBgSnow() {
     $body.addClass('is-site-bg-snow');
-    $('.site-bg__effect').remove();
+    $('.site-bg-effect').remove();
 
     particlesJS("siteBg", {
       "particles": {
@@ -733,7 +739,7 @@ var $ = jQuery.noConflict();
 
   function fn_siteBgParticles() {
     $body.addClass('is-site-bg-particles');
-    $('.site-bg__effect').remove();
+    $('.site-bg-effect').remove();
 
     particlesJS("siteBg", {
       "particles": {
@@ -862,7 +868,7 @@ var $ = jQuery.noConflict();
         var $particles = $('.particles-js-canvas-el');
         var $parallax = $('.site-bg');
 
-        $('.site-bg__effect').add($particles).each(function() {
+        $('.site-bg-effect').add($particles).each(function() {
           var $this = $(this);
 
           if ($this.length) {

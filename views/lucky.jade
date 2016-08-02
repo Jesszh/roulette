@@ -1,0 +1,18 @@
+extends layout
+
+block content
+	nav(class='nav navbar')
+	div(class='container')
+		table(class='table table-strip')
+			thead
+				tr
+					th Name
+					th Phone
+					th isWinner
+			tbody
+				each invitee in invitees
+					tr
+						td #{invitee.name}
+						td #{invitee.phone}
+						td #{invitee.isWinner}
+

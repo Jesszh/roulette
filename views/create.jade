@@ -1,0 +1,15 @@
+extends layout
+
+block content
+	nav(class='nav navbar')
+	div(class='container')
+		form(action='/create', method='post')
+			div(class='form-group')
+				label(class='form-label') Name
+				input(class='form-control input-lg',name='name',type='text')
+			div(class='form-group')
+				label(class='form-label') Phone
+				input(class='form-control input-lg',name='phone',type='text')
+			button(type='submit', class='btn btn-primary') submit
+		
+

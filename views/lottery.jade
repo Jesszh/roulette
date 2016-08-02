@@ -5,17 +5,24 @@ block content
     span
     p Loading
   div(id='siteBg', class='site-bg')
-    div(class='site-bg__img')
-    div(class='site-bg__overlay')
-    div(class='site-bg__effect')
-  div(id='main')
-    h1(class='section__title')
-      span(id='Lucky')
+    div(class='site-bg-img')
+    div(class='site-bg-overlay')
+    div(class='site-bg-effect')
+  div(id='main' class='section')
+    div(class='section-table')
+      div(class='section-cell')
+        h1(class='lucky')
+          span(id='Lucky') PINTEC ALL IN DAY
 
 
 block style
   link(rel='stylesheet', type='text/css', href='/css/lottery/vendor.css')
   link(rel='stylesheet', type='text/css', href='/css/lottery/base.css')
+  style.
+    .lucky {
+      text-align: center
+    }
+
 
 block script
   script(src='/js/lottery/plugin.js', type='text/javascript')
@@ -32,7 +39,6 @@ block script
       var item = list[index];
       lucky.html(item.name + " " + item.phone);
       index++;
-      console.info(index);
       if (index == listLength) {
         index = 0
       }
@@ -42,20 +48,3 @@ block script
     function stop() {
       clearTimeout(timer);
     }
-
-    function fn_siteLoader() {
-      $('.site-loader').velocity('fadeOut', {
-        queue: false,
-        delay: 500,
-        duration: 800,
-        complete: function () {
-          $('body').addClass('is-loaded');
-          $(document).trigger('is-loaded');
-          play();
-        }
-      });
-    }
-
-    $(window).on('load', function () {
-      fn_siteLoader();
-    });
