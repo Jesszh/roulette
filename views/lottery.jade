@@ -1,0 +1,61 @@
+extends layout
+
+block content
+  div(class='site-loader')
+    span
+    p Loading
+  div(id='siteBg', class='site-bg')
+    div(class='site-bg__img')
+    div(class='site-bg__overlay')
+    div(class='site-bg__effect')
+  div(id='main')
+    h1(class='section__title')
+      span(id='Lucky')
+
+
+block style
+  link(rel='stylesheet', type='text/css', href='/css/lottery/vendor.css')
+  link(rel='stylesheet', type='text/css', href='/css/lottery/base.css')
+
+block script
+  script(src='/js/lottery/plugin.js', type='text/javascript')
+  script(src='/js/lottery/variable.js', type='text/javascript')
+  script(src='/js/lottery/main.js', type='text/javascript')
+  script.
+    var list = !{JSON.stringify(data)};
+    var lucky = $("#Lucky");
+    var listLength = list.length;
+    var index = 0;
+    var timer;
+
+    function play() {
+      var item = list[index];
+      lucky.html(item.name + " " + item.phone);
+      index++;
+      console.info(index);
+      if (index == listLength) {
+        index = 0
+      }
+      timer = setTimeout(play,100);
+    }
+
+    function stop() {
+      clearTimeout(timer);
+    }
+
+    function fn_siteLoader() {
+      $('.site-loader').velocity('fadeOut', {
+        queue: false,
+        delay: 500,
+        duration: 800,
+        complete: function () {
+          $('body').addClass('is-loaded');
+          $(document).trigger('is-loaded');
+          play();
+        }
+      });
+    }
+
+    $(window).on('load', function () {
+      fn_siteLoader();
+    });

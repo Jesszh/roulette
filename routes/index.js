@@ -4,12 +4,28 @@ var router = express.Router();
 
 var mongodbConnection = 'mongodb://localhost/roulette';
 
-/* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-router.get('/checkin', function(req, res, next){
+router.get('/lottery', function (req, res, next) {
+
+  roulette.connect(mongodbConnection);
+  roulette.connection.on('error', function(error) {
+    throw new Error(error);
+  });
+
+  var list = roulette.available();
+  list.then(function(doc) {
+    res.render('lottery',{data: doc});
+  }, function(error) {
+    if (error) {
+      throw new Error(error);
+    }
+  });
+});
+
+router.get('/check', function(req, res, next){
   var phone = req.query.phone;
 
   roulette.connect(mongodbConnection);
@@ -27,7 +43,6 @@ router.get('/checkin', function(req, res, next){
   });
 
 });
-
 
 router.get('/win', function(req, res, next){
   var phone = req.query.phone;
