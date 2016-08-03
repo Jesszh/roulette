@@ -21,6 +21,7 @@ InviteeSchema = new Schema({
   isCheckedIn: { type : Boolean, default: false },
   checkedInAt: { type : Date },
   isWinner   : { type : Boolean, default: false },
+  reward     : { type : String },
   createAt   : { type : Date, default: Date.now()}
 },options);
 

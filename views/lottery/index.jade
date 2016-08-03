@@ -1,0 +1,117 @@
+extends ./layout
+
+block content
+  div(class='site-loader')
+    span
+    p Loading
+  div(id='siteBg', class='site-bg')
+    div(class='site-bg-img')
+    div(class='site-bg-overlay')
+    div(class='site-bg-effect')
+  div(id='main' class='section')
+    div(class='section-table')
+      div(class='section-cell')
+        h1(class='title') 
+          img(src='/img/lottery_logo.png', style='display:inline-block; margin-top: -20px; margin-right: 20px') 
+          | ALL IN DAY
+        div(class='good-lucky') 
+          h2(id='reward', data-reward='0') 获奖者
+          h1(id='winner')
+
+
+block style
+  style.
+    .good-lucky,
+    .title {
+      text-align: center;
+      font-family: 'DIN-bold';
+    }
+
+    .good-lucky {
+      display: none;
+    }
+
+
+block script
+  script.
+    var list = !{JSON.stringify(data)},
+        title = $(".title"),
+        broad = $(".good-lucky"),
+        winnerContainer = $("#winner"),
+        rewardContainer = $("#reward"),
+        listLength = list.length,
+        index = Math.ceil(Math.random() * (listLength - 1)),
+        timer,
+        isRuning;
+
+    function play() {
+      if(!isRuning){
+        title.hide();
+        broad.show();
+      }
+      isRuning = true;
+
+      index++;
+      if (index == listLength) {
+        index = 0
+      }
+      
+      var item = list[index];
+
+      winnerContainer.html(item.name + " " + encryptPhone(item.phone)).attr('data-phone', item.phone).attr('data-idx', index);
+
+      timer = setTimeout(play,100);
+    }
+
+    function stop() {
+      isRuning = false;
+      clearTimeout(timer);
+      var winner = winnerContainer.data('phone');
+      var winnerIdx = winnerContainer.data('idx');
+      var reward = rewardContainer.data('reward');
+      $.post('/win', {phone: winner, reward: reward}).success(function(data){
+        list[winnerIdx].isWinner = true;
+        console.info(list[winnerIdx]);
+        console.info(data);
+      }).error(function (error){
+        console.log(error)
+      })
+    }
+
+    function encryptPhone(phone){
+      return phone.substr(0, 3) + '****' + phone.substr(7, 11)
+    }
+
+    function setReward(){
+      
+    }
+    
+    $(document).on('keydown',function(e){
+      var keycode = e.which;
+      if(!isRuning) {
+        switch(keycode){
+          case 83:
+            play();
+            break;
+          case 112:
+            rewardContainer.html('一等奖获奖者').attr('data-reward', 1);
+            break;
+          case 113:
+            rewardContainer.html('二等奖获奖者').attr('data-reward', 2);
+            break;
+          case 114:
+            rewardContainer.html('三等奖获奖者').attr('data-reward', 3);
+            break;
+          case 115:
+            rewardContainer.html('四等奖获奖者').attr('data-reward', 4);
+            break;
+          case 116:
+            rewardContainer.html('五等奖获奖者').attr('data-reward', 5);
+            break;
+        }
+      }else{
+        if(keycode == 83){
+          stop();
+        }
+      }
+    })

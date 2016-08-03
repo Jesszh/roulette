@@ -1,8 +1,9 @@
-extends layout
+extends shared/layout
 
 block content
-	nav(class='nav navbar')
 	div(class='container')
+		h1 Invitees
+		hr
 		form(action='/', method='get')
 			div(class='form-group')
 				input(class='form-control input-lg',name='key',type='text', value='#{key}', placeholder='Enter a part fo phone number for search')

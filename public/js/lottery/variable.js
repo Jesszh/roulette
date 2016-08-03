@@ -63,10 +63,10 @@ var _parallax_star_opacity =                      1;
 // ============================================ //
 
 // 0.1 to 1 - star opacity
-var _star_opacity =                               0.84;
+var _star_opacity =                               0.9;
 
 // none, top, top-right, right, bottom-right, bottom, bottom-left, left, top-left - star direction
-var _star_direction =                             'top-right';
+var _star_direction =                             'none';
 
 // ============================================ //
 // Bubble setting                               //

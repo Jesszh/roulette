@@ -5,7 +5,7 @@ var router = express.Router();
 var mongodbConnection = 'mongodb://localhost/roulette';
 
 router.get('/', function(req, res, next) {
-  var key = req.query.key;
+  var key = req.query.key == undefined? '':req.query.key;
 
   roulette.connect(mongodbConnection);
   roulette.connection.on('error', function(error) {
@@ -22,7 +22,7 @@ router.get('/', function(req, res, next) {
   });
 });
 
-router.get('/lucky', function(req, res, next) {
+router.get('/winner', function(req, res, next) {
 
   roulette.connect(mongodbConnection);
   roulette.connection.on('error', function(error) {
@@ -31,24 +31,7 @@ router.get('/lucky', function(req, res, next) {
 
   var list = roulette.list({isWinner: true});
   list.then(function(doc) {
-    res.render('lucky', { invitees: doc});
-  }, function(error) {
-    if (error) {
-      throw new Error(error);
-    }
-  });
-});
-
-router.get('/lottery', function (req, res, next) {
-
-  roulette.connect(mongodbConnection);
-  roulette.connection.on('error', function(error) {
-    throw new Error(error);
-  });
-
-  var list = roulette.list({isCheckedIn: true, isWinner: false});
-  list.then(function(doc) {
-    res.render('lottery',{data: doc});
+    res.render('winner', { invitees: doc});
   }, function(error) {
     if (error) {
       throw new Error(error);
@@ -77,13 +60,14 @@ router.get('/check', function(req, res, next){
 
 router.post('/win', function(req, res, next){
   var phone = req.body.phone;
+  var reward = req.body.reward;
 
   roulette.connect(mongodbConnection);
   roulette.connection.on('error', function(error) {
     throw new Error(error);
   });
 
-  var inviteePromise = roulette.update(phone, {isWinner: true});
+  var inviteePromise = roulette.update(phone, {isWinner: true, reward: reward});
   inviteePromise.then(function(doc) {
     res.send(doc);
   }, function(error) {
