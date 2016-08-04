@@ -14,7 +14,7 @@ block content
 					th Phone
 					th isWinner
 					th 
-						a(class='btn btn-default btn-sm', href='/create') 增加
+						a(class='btn btn-primary btn-sm', href='/create') 增加
 			tbody
 				each invitee in invitees
 					tr
@@ -26,6 +26,7 @@ block content
 								a(class='btn btn-success btn-sm', href='/check?phone=#{invitee.phone}') 签到
 							else
 								a(class='btn btn-default btn-sm disabled', href='#') 已签到
+								a(class='btn btn-danger btn-sm', href='/recall?phone=#{invitee.phone}') 撤销
 								br
 								small #{invitee.checkedInAt}
 

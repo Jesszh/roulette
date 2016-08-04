@@ -10,10 +10,15 @@ block content
 					th Name
 					th Phone
 					th isWinner
+					th level
+					th
 			tbody
 				each invitee in invitees
 					tr
 						td #{invitee.name}
 						td #{invitee.phone}
 						td #{invitee.isWinner}
+						td #{invitee.reward}
+						td
+							a(href='#') GOT
 

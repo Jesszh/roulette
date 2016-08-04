@@ -772,15 +772,15 @@ i {
 
 /* cloud */
 .cloud:nth-child(1) {
-  background-image: url(../img/item/cloud-01.png);
+  background-image: url(../../img/cloud-01.png);
 }
 
 .cloud:nth-child(2) {
-  background-image: url(../img/item/cloud-02.png);
+  background-image: url(../../img/cloud-02.png);
 }
 
 .cloud:nth-child(3) {
-  background-image: url(../img/item/cloud-03.png);
+  background-image: url(../../img/cloud-03.png);
 }
 
 /* parallax star */

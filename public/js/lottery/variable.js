@@ -24,8 +24,7 @@ var _site_bg_overlay_color =                      'rgba(0, 0, 0, 0.5)';
 
 
 // ============================================ //
-// Cloud / Parallax star / Star / bubble /      //
-// Snow / particles)                            //
+// Backgound Effect                             //
 // ============================================ //
 
 // 0 = disable
@@ -63,7 +62,7 @@ var _parallax_star_opacity =                      1;
 // ============================================ //
 
 // 0.1 to 1 - star opacity
-var _star_opacity =                               0.9;
+var _star_opacity =                               0.95;
 
 // none, top, top-right, right, bottom-right, bottom, bottom-left, left, top-left - star direction
 var _star_direction =                             'none';
@@ -87,13 +86,13 @@ var _snow_speed =                                 3;
 // ============================================ //
 
 // 0.1 to 1 - particles opacity
-var _particles_opacity =                          0.85;
+var _particles_opacity =                          0.95;
 
-// 0.1 to 1 - particles speed
+// 0.1 to 10 - particles speed
 var _particles_speed =                            2;
 
 // 0.1 to 1 - particles line opacity
-var _particles_line_opacity =                     0.45;
+var _particles_line_opacity =                     0.5;
 
 
 

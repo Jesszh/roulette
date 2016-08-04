@@ -47,7 +47,26 @@ router.get('/check', function(req, res, next){
     throw new Error(error);
   });
 
-  var inviteePromise = roulette.update(phone, {isCheckedIn: true});
+  var inviteePromise = roulette.update(phone, {isCheckedIn: true, checkedInAt: Date.now()});
+  inviteePromise.then(function(doc) {
+    res.redirect('/?key=' + doc.phone)
+  }, function(error) {
+    if (error) {
+      throw new Error(error);
+    }
+  });
+
+});
+
+router.get('/recall', function(req, res, next){
+  var phone = req.query.phone;
+
+  roulette.connect(mongodbConnection);
+  roulette.connection.on('error', function(error) {
+    throw new Error(error);
+  });
+
+  var inviteePromise = roulette.update(phone, {isCheckedIn: false, checkedInAt: null});
   inviteePromise.then(function(doc) {
     res.redirect('/?key=' + doc.phone)
   }, function(error) {
