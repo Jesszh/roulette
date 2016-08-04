@@ -1,0 +1,11 @@
+.good-lucky {
+  text-align: center;
+  font-family: 'DIN-bold';
+}
+.title,
+#reward {
+  transition: all 0.2s;
+}
+.highlight {
+  color: #f00;
+}

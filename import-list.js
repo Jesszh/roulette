@@ -28,3 +28,5 @@ lineReader.eachLine('./tmp/invitees.csv', function(row,last) {
   });
 
 })
+
+process.exit(1);
