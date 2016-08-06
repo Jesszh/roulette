@@ -7,17 +7,14 @@ var session = require('express-session');
 var bodyParser = require('body-parser');
 var http = require('http');
 var mongoose = require('mongoose');
-
 var passport = require('passport');
 var flash    = require('connect-flash');
 
-var config = require('./config');
-
 var app = express();
+app.set('env', 'production');
 
+var config = require('./config/' + app.get('env'));
 app.set('port', config.port);
-
-mongoose.connect(config.mongodb);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -75,9 +72,16 @@ app.use(function(err, req, res, next) {
   });
 });
 
+process.on('uncaughtException', function (err) {
+  console.log(err);
+});
 
 module.exports = app;
+
+mongoose.connect(config.mongodb);
+
 // 启动及端口
 http.createServer(app).listen(app.get('port'), function(){
+  console.log(app.get('env'));
   console.log('Express server listening on port ' + app.get('port'));
 });

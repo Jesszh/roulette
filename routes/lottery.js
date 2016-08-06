@@ -10,7 +10,7 @@ router.get('/', filter.isAuthenticated, function (req, res, next) {
     res.render('lottery/index',{data: doc});
   }, function(error) {
     if (error) {
-      throw new Error(error);
+      next(error);
     }
   });
 });
@@ -24,7 +24,7 @@ router.post('/win', filter.isAuthenticated, function(req, res, next){
     res.send(doc);
   }, function(error) {
     if (error) {
-      throw new Error(error);
+      next(error);
     }
   });
 
@@ -37,7 +37,7 @@ router.get('/update', filter.isAuthenticated, function (req, res, next) {
     res.send(doc);
   }, function(error) {
     if (error) {
-      throw new Error(error);
+      next(error);
     }
   });
 });

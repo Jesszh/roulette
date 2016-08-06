@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var roulette = require('../lib/roulette');
 var filter = require('../lib/filter');
+var logger = require('morgan');
 
 router.get('/list', filter.isAuthenticated, function(req, res, next) {
 
@@ -12,7 +13,7 @@ router.get('/list', filter.isAuthenticated, function(req, res, next) {
     res.render('invitee/list', { invitees: doc , key: key});
   }, function(error) {
     if (error) {
-      throw new Error(error);
+      next(error);
     }
   });
 });
@@ -24,7 +25,7 @@ router.get('/winner', filter.isAuthenticated, function(req, res, next) {
     res.render('invitee/winner', { invitees: doc});
   }, function(error) {
     if (error) {
-      throw new Error(error);
+      next(error);
     }
   });
 });
@@ -38,7 +39,7 @@ router.post('/check', filter.isAuthenticated, function(req, res, next){
     res.redirect('/invitee/' + doc._id)
   }, function(error) {
     if (error) {
-      throw new Error(error);
+      next(error);
     }
   });
 
@@ -53,7 +54,7 @@ router.post('/recall', filter.isAuthenticated, function(req, res, next){
     res.redirect('/invitee/' + doc._id)
   }, function(error) {
     if (error) {
-      throw new Error(error);
+      next(error);
     }
   });
 
@@ -68,7 +69,7 @@ router.get('/edit', filter.isAuthenticated, function (req, res,next) {
       res.render('invitee/edit', { invitee: doc});
     }, function(error){
       if (error) {
-        throw new Error(error);
+        next(error);
       }
     })
   }else{
@@ -96,7 +97,7 @@ router.post('/edit', filter.isAuthenticated, function (req, res, next) {
       res.redirect('/invitee/' + doc._id.toString())
     }, function(error) {
       if (error) {
-        throw new Error(error);
+        next(error);
       }
     });
     
@@ -108,7 +109,7 @@ router.post('/edit', filter.isAuthenticated, function (req, res, next) {
       res.redirect('/invitee/' + doc._id.toString())
     }, function(error) {
       if (error) {
-        throw new Error(error);
+        next(error);
       }
     });
   }
@@ -121,7 +122,7 @@ router.get('/:id', filter.isAuthenticated, function(req, res, next){
     res.render('invitee/index', { invitee: doc});
   }, function(error){
     if (error) {
-      throw new Error(error);
+      next(error);
     }
   })
 });
