@@ -2,22 +2,17 @@ extends ../shared/layout
 
 block content
 	div(class='container')
-		h1 Winners
+		h1 获奖者
 		hr
 		table(class='table table-strip')
 			thead
 				tr
-					th Name
-					th Phone
-					th isWinner
-					th level
-					th
+					th 姓名
+					th 手机
+					th 奖项
 			tbody
 				each invitee in invitees
 					tr
 						td #{invitee.name}
 						td #{invitee.phone}
-						td #{invitee.isWinner}
 						td #{invitee.reward}
-						td
-							a(href='#') GOT
