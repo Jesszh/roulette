@@ -3,17 +3,21 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+var session = require('express-session');
 var bodyParser = require('body-parser');
 var http = require('http');
+var mongoose = require('mongoose');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
-var lottery = require('./routes/lottery');
+var passport = require('passport');
+var flash    = require('connect-flash');
+
 var config = require('./config');
 
 var app = express();
 
 app.set('port', config.port);
+
+mongoose.connect(config.mongodb);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -28,9 +32,17 @@ app.use(cookieParser());
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
-app.use('/users', users);
-app.use('/lottery', lottery);
+app.use(session({ secret: 'ilovelynnforever' }));
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+app.use(flash()); // use connect-flash for flash messages stored in session
+
+app.use('/', require('./routes/index') );
+app.use('/invitee', require('./routes/invitee') );
+app.use('/lottery', require('./routes/lottery'));
+app.use('/passport', require('./routes/passport'));
+
+require('./config/passport')(passport);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

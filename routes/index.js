@@ -1,126 +1,54 @@
 var express = require('express');
-var roulette = require('../lib/roulette');
 var router = express.Router();
+var passport = require('passport');
+var filter = require('../lib/filter');
 
-var mongodbConnection = 'mongodb://localhost/roulette';
+router.get('/', filter.isAuthenticated, function (req, res, next) {
 
-router.get('/', function(req, res, next) {
-  var key = req.query.key == undefined? '':req.query.key;
-
-  roulette.connect(mongodbConnection);
-  roulette.connection.on('error', function(error) {
-    throw new Error(error);
-  });
-
-  var list = roulette.list({phone: new RegExp(key)});
-  list.then(function(doc) {
-    res.render('index', { invitees: doc , key: key});
-  }, function(error) {
-    if (error) {
-      throw new Error(error);
-    }
-  });
+  res.render('index');
+  
 });
 
-router.get('/winner', function(req, res, next) {
-
-  roulette.connect(mongodbConnection);
-  roulette.connection.on('error', function(error) {
-    throw new Error(error);
-  });
-
-  var list = roulette.list({isWinner: true});
-  list.then(function(doc) {
-    res.render('winner', { invitees: doc});
-  }, function(error) {
-    if (error) {
-      throw new Error(error);
-    }
-  });
+// =====================================
+// LOGIN ===============================
+// =====================================
+// show the login form
+router.get('/login', function(req, res) {
+    // render the page and pass in any flash data if it exists
+    res.render('login', { message: req.flash('loginMessage') }); 
 });
 
-router.get('/check', function(req, res, next){
-  var phone = req.query.phone;
+// process the login form
+router.post('/login', passport.authenticate('local-login', {
+    successRedirect : '/', // redirect to the secure profile section
+    failureRedirect : 'login', // redirect back to the signup page if there is an error
+    failureFlash : true // allow flash messages
+}));
 
-  roulette.connect(mongodbConnection);
-  roulette.connection.on('error', function(error) {
-    throw new Error(error);
-  });
 
-  var inviteePromise = roulette.update(phone, {isCheckedIn: true, checkedInAt: Date.now()});
-  inviteePromise.then(function(doc) {
-    res.redirect('/?key=' + doc.phone)
-  }, function(error) {
-    if (error) {
-      throw new Error(error);
-    }
-  });
+// // =====================================
+// // SIGNUP ==============================
+// // =====================================
+// // show the signup form
+// router.get('/signup', function(req, res) {
 
-});
+//     // render the page and pass in any flash data if it exists
+//     res.render('signup', { message: req.flash('signupMessage') });
+// });
 
-router.get('/recall', function(req, res, next){
-  var phone = req.query.phone;
+// // process the signup form
+// router.post('/signup', passport.authenticate('local-signup', {
+//     successRedirect : '/', // redirect to the secure profile section
+//     failureRedirect : 'signup', // redirect back to the signup page if there is an error
+//     failureFlash : true // allow flash messages
+// }));
 
-  roulette.connect(mongodbConnection);
-  roulette.connection.on('error', function(error) {
-    throw new Error(error);
-  });
-
-  var inviteePromise = roulette.update(phone, {isCheckedIn: false, checkedInAt: null});
-  inviteePromise.then(function(doc) {
-    res.redirect('/?key=' + doc.phone)
-  }, function(error) {
-    if (error) {
-      throw new Error(error);
-    }
-  });
-
-});
-
-router.post('/win', function(req, res, next){
-  var phone = req.body.phone;
-  var reward = req.body.reward;
-
-  roulette.connect(mongodbConnection);
-  roulette.connection.on('error', function(error) {
-    throw new Error(error);
-  });
-
-  var inviteePromise = roulette.update(phone, {isWinner: true, reward: reward});
-  inviteePromise.then(function(doc) {
-    res.send(doc);
-  }, function(error) {
-    if (error) {
-      throw new Error(error);
-    }
-  });
-
-});
-
-router.get('/create', function (req, res,next) {
-  res.render('create');
-})
-
-router.post('/create', function (req, res, next) {
-  var name = req.body.name,
-      phone = req.body.phone;
-
-  roulette.connect(mongodbConnection);
-  roulette.connection.on('error', function(error) {
-    throw new Error(error);
-  });
-
-  var inviteePromise = roulette.generate({
-    name : name,
-    phone: phone
-  });
-  inviteePromise.then(function(doc) {
-    res.redirect('/?key=' + doc.phone)
-  }, function(error) {
-    if (error) {
-      throw new Error(error);
-    }
-  });
+// =====================================
+// LOGOUT ==============================
+// =====================================
+router.get('/logout', function(req, res) {
+    req.logout();
+    res.redirect('/');
 });
 
 module.exports = router;

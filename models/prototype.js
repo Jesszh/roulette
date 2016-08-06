@@ -97,8 +97,10 @@ exports.Model.prototype.create = function(data) {
 exports.Model.prototype.findOrCreate = function(query, document, options) {
   var promise = new Promise()
     , baseModel = this;
+  
   baseModel.findOne(query, function(error, result) {
     if (error) {
+      console.log(document);
       if (error.message && error.message.match(/E11000/i)) {
         promise.reject(new Error('Duplicate Key Error'), true);
       } else {
@@ -112,6 +114,7 @@ exports.Model.prototype.findOrCreate = function(query, document, options) {
         createPromise.then(function(result) {
           promise.resolve(result);
         }, function(error) {
+          console.log(document);
           promise.reject(error, true);
         });
       }

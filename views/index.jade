@@ -1,32 +1,11 @@
 extends shared/layout
 
 block content
-	div(class='container')
-		h1 Invitees
-		hr
-		form(action='/', method='get')
-			div(class='form-group')
-				input(class='form-control input-lg',name='key',type='text', value='#{key}', placeholder='Enter a part fo phone number for search')
-		table(class='table table-strip')
-			thead
-				tr
-					th Name
-					th Phone
-					th isWinner
-					th 
-						a(class='btn btn-primary btn-sm', href='/create') 增加
-			tbody
-				each invitee in invitees
-					tr
-						td #{invitee.name}
-						td #{invitee.phone}
-						td #{invitee.isWinner}
-						td
-							if !invitee.isCheckedIn
-								a(class='btn btn-success btn-sm', href='/check?phone=#{invitee.phone}') 签到
-							else
-								a(class='btn btn-default btn-sm disabled', href='#') 已签到
-								a(class='btn btn-danger btn-sm', href='/recall?phone=#{invitee.phone}') 撤销
-								br
-								small #{invitee.checkedInAt}
+	div(class="container")
 
+		form(action='/invitee/list', method='get', style='margin-top:200px')
+			div(class='form-group')
+				input(class='form-control input-lg',name='key',type='text', placeholder='输入手机号搜索')
+		
+			div(class='form-group text-center')
+				button(type='submit' class="btn btn-primary btn-lg") 搜索

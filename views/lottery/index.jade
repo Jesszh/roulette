@@ -15,7 +15,7 @@ block content
           h1(class='title') 
             img(src='/img/lottery_logo.png', style='display:inline-block; margin-top: -20px; margin-right: 20px') 
             | ALL IN DAY
-          h2(id='reward', data-reward='0') 
+          h2(id='reward') 
             span(id='level', class='highlight')
             | 获奖者
           h1(id='winner')
@@ -33,6 +33,9 @@ block script
         isRuning;
 
     function play() {
+      if(list.length == 0 ){
+        return;
+      }
 
       if(!isRuning) {
         title.hide();
@@ -41,7 +44,7 @@ block script
 
       isRuning = true;
       index++;
-      if (index == listLength) {
+      if (index >= listLength) {
         index = 0
       }
       
@@ -51,21 +54,21 @@ block script
         return;
       }
 
-      winnerContainer.html(item.name + " " + encryptPhone(item.phone)).data('phone', item.phone).data('idx', index);
+      winnerContainer.html(item.name + " " + encryptPhone(item.phone)).data('id', item._id).data('idx', index);
       timer = setTimeout(play,100);
     }
 
     function stop() {
       isRuning = false;
       clearTimeout(timer);
-      var winner = winnerContainer.data('phone');
+      var winner = winnerContainer.data('id');
       var winnerIdx = winnerContainer.data('idx');
       var reward = rewardContainer.data('reward');
-      
-      $.post('/win', {phone: winner, reward: reward}).success(function(data){
+
+      $.post('/lottery/win', {id: winner, reward: reward}).success(function(data){
         list[winnerIdx].isWinner = true;
       }).error(function (error){
-        console.log(error)
+        console.log(error);
       })
     }
 
